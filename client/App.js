@@ -11,27 +11,35 @@ import { useMatch } from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
-  const user = window.localStorage.getItem("loggedinUser");
+  const user = JSON.parse(window.localStorage.getItem("loggedinUser"));
+  console.log("the lcoal user", user);
   const cartItems = useSelector((state) => state.cartItems);
-  const products = useSelector((state) => state.products);
+  let products = useSelector((state) => state.products);
+  products = products ? products : [];
 
   useEffect(() => {
     // load products in store form backend
-
+    console.log("the useeffect entered");
     dispatch(initializeProducts());
-    if (user) dispatch(initializeCartItems());
+    if (user) {
+      dispatch(initializeCartItems());
 
-    // set logged in user
-    dispatch(setUserObject(JSON.parse(user)));
-  }, [dispatch, user]);
+      // set logged in user
+      dispatch(setUserObject(user));
+    }
+  }, []);
 
   const matchProduct = useMatch("/product/:id");
+  console.log("the products is", products);
   // console.log(matchProduct);
   const productDetail = matchProduct
     ? products.find((prod) => {
         return prod.id === Number(matchProduct.params.id);
       })
     : null;
+
+  console.log("the app ", productDetail);
+  console.log("the match ", matchProduct);
 
   return (
     <>

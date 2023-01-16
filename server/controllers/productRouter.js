@@ -2,10 +2,10 @@ const { Product, Category, Brand } = require("../models");
 
 const cloudinary = require("cloudinary").v2;
 
-cloudinary.config({ 
-  cloud_name: 'dilyevrzy', 
-  api_key: '311774849752374', 
-  api_secret: '2atP418TqwMBD5PC9GcP8NHV0BI' 
+cloudinary.config({
+  cloud_name: "dilyevrzy",
+  api_key: "311774849752374",
+  api_secret: "2atP418TqwMBD5PC9GcP8NHV0BI",
 });
 
 const productRouter = require("express").Router();
@@ -25,7 +25,7 @@ productRouter.get("/:id", async (req, res) => {
     include: [{ model: Category }, { model: Brand }],
   });
 
-  res.json(product);
+  return res.json(product);
 });
 
 productRouter.post("/", async (req, res) => {
@@ -33,8 +33,11 @@ productRouter.post("/", async (req, res) => {
 
   const category = await Category.findByPk(req.body.categoryId);
   const brand = await Brand.findByPk(req.body.brandId);
+  console.log("the product", req.body);
+  console.log("the file", file);
 
   cloudinary.uploader.upload(file.tempFilePath, async (err, result) => {
+    console.log("the result is", result);
     const product = {
       productName: req.body.productName,
       price: req.body.price,
@@ -45,7 +48,7 @@ productRouter.post("/", async (req, res) => {
       brandId: brand.id,
     };
     const newProduct = await Product.create(product);
-    res.json(newProduct);
+    return res.json(newProduct);
   });
 });
 

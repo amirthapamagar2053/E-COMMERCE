@@ -21,12 +21,12 @@ const Products = ({ products }) => {
   };
   return (
     <div className="wrapper ">
-      <div className=" flex split-center h4"> All Products</div>
+      <div className=" flex split-center align-center h4"> All Products</div>
       {message ? <div className=" flex split-center ">{message}</div> : null}
       <div className="gallery">
         {products.map((product, index) => {
           return (
-            <div key={index} className="content">
+            <div key={index}>
               <Link to={`/product/${product.id}`}>
                 <img
                   className="product-img"
